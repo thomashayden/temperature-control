@@ -3,4 +3,4 @@ project(temperature_control C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(temperature_control main.c temperature_schedule.c rxtx.c)
+add_executable(temperature_control main.c temperature_schedule.c rxtx.c temperature_management.c)
