@@ -1,0 +1,31 @@
+#include <stdio.h>
+
+#include "temperature_schedule.h"
+#include "rxtx.h"
+
+int main() {
+    uint8_t* targets = get_temperature_targets();
+    for (uint8_t i = 0; i < 24; i++) {
+        printf("%d ", targets[i]);
+    }
+    printf("\n");
+    free(targets);
+
+    uint8_t new_targets[24] = { 68, 72, 72, 72, 72, 72, 72, 72, 68, 68, 68, 68, 68, 68, 68, 68, 68, 72, 68, 68, 68, 68, 68, 68 };
+    set_temperature_targets(new_targets);
+
+    targets = get_temperature_targets();
+    for (uint8_t i = 0; i < 24; i++) {
+        printf("%d ", targets[i]);
+    }
+    printf("\n");
+    free(targets);
+
+    printf("%d\n", get_current_temperature_target());
+
+    printf("Starting remote code detection\n-----------------------------\n");
+
+    find_remote_code();
+
+    return 0;
+}
