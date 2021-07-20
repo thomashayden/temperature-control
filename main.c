@@ -9,6 +9,7 @@
 
 int main() {
     initialize_file_name();
+    setup();
 
     uint8_t new_targets[24] = { 68, 72, 72, 72, 72, 72, 72, 72, 68, 68, 68, 68, 68, 68, 68, 68, 68, 72, 68, 68, 68, 68, 68, 68 };
     set_temperature_targets(new_targets);
@@ -44,7 +45,8 @@ int main() {
 //
 //    printf("Starting remote code detection\n-----------------------------\n");
 
-    find_remote_code();
+//    find_remote_code();
+    write_on(1);
 
     return 0;
 }

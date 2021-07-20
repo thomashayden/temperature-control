@@ -1,9 +1,9 @@
 #include "rxtx.h"
-#include "wiringPi.h"
+#include "signal_data.c"
 
 void setup() {
     // TODO: Setup pins that are needed
-    wiringPiSetupGpio();
+    wiringPiSetup();
     pinMode(PIN_RECEIVE, INPUT);
     pinMode(PIN_TRANSMIT, OUTPUT);
 }
@@ -30,6 +30,20 @@ long long int get_time_microsecond() {
     return timestamp_usec;
 }
 
+void write_on(const int id) {
+	if (id == 1) {
+		int array_size = sizeof on_1_timing / sizeof on_1_timing[0];
+		int index = 0;
+		long long int start = get_time_microsecond();
+		while (index < array_size) {
+			if (get_time_microsecond() - start >= on_1_timing[index]) {
+				digitalWrite(PIN_TRANSMIT, on_1[index]);
+				index = index + 1;
+			}
+		}
+	}
+}
+
 void find_remote_code() {
     // Procedure:
     //   Listen determine that there is no serious noise
@@ -51,28 +65,32 @@ void find_remote_code() {
 //    }
 //    fprintf(stdout, "No noise detected.\n");
 
+    write_tx(LOW);
+    
     // Prompt user to press button once
     fprintf(stdout, "Beginning detection of button. Press button once now.\n");
 
     // Monitor Rx for a HIGH signal
     long long int start = get_time_microsecond();
     while (read_rx() == LOW && start - get_time_microsecond() < WAIT_FOR_BUTTON_TIMEOUT_MS * 1000);
-    if (start - get_time_microsecond() < WAIT_FOR_BUTTON_TIMEOUT_MS * 1000) {
+    if (get_time_microsecond() - start > WAIT_FOR_BUTTON_TIMEOUT_MS * 1000) {
         fprintf(stderr, "Time out waiting for button press. No high signal detected on Rx.");
         return;
     }
 
     // TODO: Start recording the changes in signal along with their time delta
     // When no HIGH signal has been detected for LISTEN_TIMEOUT stop listening
+    fprintf(stdout, "Signal start detected");
     start = get_time_microsecond();
     int last_signal = LOW;
     long long int time_delta = get_time_microsecond() - start;
     long long int time_last_signal = start;
-    while (get_time_microsecond() - time_last_signal < LISTEN_TIMEOUT_MS) {
+    while (get_time_microsecond() - time_last_signal < LISTEN_TIMEOUT_MS * 1000) {
+    	time_delta = get_time_microsecond() - start;
         if (read_rx() != last_signal) {
             last_signal = read_rx();
             time_last_signal = get_time_microsecond();
-            fprintf(stdout, "%lld,%d;", time_delta, last_signal);
+            fprintf(stdout, "%lld,%d\n", time_delta, last_signal);
         }
     }
     fprintf(stdout, "\n");
