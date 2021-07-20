@@ -14,7 +14,7 @@ float get_current_temperature_target() {
     } else if (targets[next_hour] == AC_OFF) {
         return targets[hour];
     } else {
-        return targets[hour] +  (uint8_t)((targets[next_hour] - targets[hour]) * (minutes / 60.0));
+        return targets[hour] +  (targets[next_hour] - targets[hour]) * (minutes / 60.0);
     }
 }
 
