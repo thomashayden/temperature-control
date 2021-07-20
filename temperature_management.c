@@ -2,6 +2,7 @@
 
 int desired_ac_state = 0;
 char* filename;
+uint32_t last_ac_state_change_time = 0;
 
 float get_current_temperature() {
     // 7c 01 7f 80 7f ff 04 10 86 : crc=86 YES
@@ -60,4 +61,21 @@ void log_temperature_and_ac_state() {
     fp = fopen(filename, "a");
     fprintf(fp, "%d,%.1f,%d,%d\n", get_current_time_sec(), get_current_temperature(), get_current_temperature_target(), desired_ac_state);
     fclose(fp);
+}
+
+void update() {
+    int last_desired = desired_ac_state;
+    int ac_state_desired = get_desired_ac_state();
+    if (last_desired != ac_state_desired) {
+        if (get_current_time_sec() - last_ac_state_change_time >= MINIMUM_AC_OFF_TIME * 60) {
+            fprintf(stdout, "Setting AC to state %d\n", ac_state_desired);
+            write(ac_state_desired, 1);
+            last_ac_state_change_time = get_current_time_sec();
+        } else {
+            desired_ac_state = last_desired;
+            fprintf(stderr, "Desire to change AC state to %d, but minimum state change timing is blocking.",
+                    ac_state_desired);
+        }
+    }
+    log_temperature_and_ac_state();
 }

@@ -24,7 +24,7 @@ int read_rx();
 
 void write_tx(const int value);
 
-void write_on(const int id);
+void write(const int on, const int id);
 
 /**
  * Listen for a code sent from the remote and determine how to replicate it.

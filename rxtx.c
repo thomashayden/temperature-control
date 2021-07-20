@@ -30,18 +30,30 @@ long long int get_time_microsecond() {
     return timestamp_usec;
 }
 
-void write_on(const int id) {
-	if (id == 1) {
-		int array_size = sizeof on_1_timing / sizeof on_1_timing[0];
-		int index = 0;
-		long long int start = get_time_microsecond();
-		while (index < array_size) {
-			if (get_time_microsecond() - start >= on_1_timing[index]) {
-				digitalWrite(PIN_TRANSMIT, on_1[index]);
-				index = index + 1;
-			}
-		}
-	}
+void write(const int on, const int id) {
+    const int* signal;
+    const int* signal_timing;
+    int array_size;
+    if (on == 1 && id == 1) {
+        array_size = sizeof on_1_timing / sizeof on_1_timing[0];
+        signal = on_1;
+        signal_timing = on_1_timing;
+	} else if (on == 0 && id == 1) {
+        array_size = sizeof off_1_timing / sizeof off_1_timing[0];
+        signal = off_1;
+        signal_timing = off_1_timing;
+    } else {
+        fprintf(stderr, "Invalid write on? id combo: on %d, id %d. Ignoring call.\n", on, id);
+    }
+
+    int index = 0;
+    long long int start = get_time_microsecond();
+    while (index < array_size) {
+        if (get_time_microsecond() - start >= signal_timing[index]) {
+            digitalWrite(PIN_TRANSMIT, signal[index]);
+            index = index + 1;
+        }
+    }
 }
 
 void find_remote_code() {
