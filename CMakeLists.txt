@@ -7,3 +7,5 @@ add_executable(temperature_control main.c temperature_schedule.c rxtx.c temperat
 
 find_library(WIRINGPI_LIBRRIES wiringPi)
 target_link_libraries(temperature_control ${WIRINGPI_LIBRARIES})
+
+# gcc -o temperature_control main.c temperature_management.c rxtx.c temperature_schedule.c -lwiringPi

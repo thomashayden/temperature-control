@@ -30,7 +30,7 @@ long long int get_time_microsecond() {
     return timestamp_usec;
 }
 
-void write(const int on, const int id) {
+void write_remote(const int on, const int id) {
     const int* signal;
     const int* signal_timing;
     int array_size;

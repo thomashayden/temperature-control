@@ -69,7 +69,7 @@ void update() {
     if (last_desired != ac_state_desired) {
         if (get_current_time_sec() - last_ac_state_change_time >= MINIMUM_AC_OFF_TIME * 60) {
             fprintf(stdout, "Setting AC to state %d\n", ac_state_desired);
-            write(ac_state_desired, 1);
+            write_remote(ac_state_desired, 1);
             last_ac_state_change_time = get_current_time_sec();
         } else {
             desired_ac_state = last_desired;
