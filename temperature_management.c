@@ -23,7 +23,7 @@ void initialize_file_name() {
     time(&timeIn);
     struct tm* dateTime;
     dateTime = localtime(&timeIn);
-    sprintf(filename, 32, "%d%d%d", 1900 + dateTime->tm_year, 1 + dateTime->tm_mon, dateTime->tm_mday);
+    sprintf(filename, "%d%d%d", 1900 + dateTime->tm_year, 1 + dateTime->tm_mon, dateTime->tm_mday);
 }
 
 int get_desired_ac_state() {
@@ -40,6 +40,6 @@ int get_desired_ac_state() {
 void log_temperature_and_ac_state() {
     FILE* fp;
     fp = fopen(filename, "a");
-    fprintf(fp, "%d,%.1f,%d,%d", get_current_time_sec(), get_current_temperature(), get_current_temperature_target(), desired_ac_state);
+    fprintf(fp, "%d,%.1f,%d,%d\n", get_current_time_sec(), get_current_temperature(), get_current_temperature_target(), desired_ac_state);
     fclose(fp);
 }
