@@ -46,7 +46,7 @@ void initialize_file_name() {
 }
 
 int get_desired_ac_state() {
-    uint8_t target_temp = get_current_temperature_target();
+    float target_temp = get_current_temperature_target();
     float actual_temp = get_current_temperature();
     if (target_temp + MAXIMUM_ALLOWABLE_TEMPERATURE_DELTA <= actual_temp) {
         desired_ac_state = 1;
@@ -59,7 +59,7 @@ int get_desired_ac_state() {
 void log_temperature_and_ac_state() {
     FILE* fp;
     fp = fopen(filename, "a");
-    fprintf(fp, "%d,%.1f,%d,%d\n", get_current_time_sec(), get_current_temperature(), get_current_temperature_target(), desired_ac_state);
+    fprintf(fp, "%d,%.1f,%.1f,%d\n", get_current_time_sec(), get_current_temperature(), get_current_temperature_target(), desired_ac_state);
     fclose(fp);
 }
 

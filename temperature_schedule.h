@@ -14,7 +14,7 @@
  *
  * @return target temperature in fahrenheit
  */
-uint8_t get_current_temperature_target();
+float get_current_temperature_target();
 
 /**
  * Get the array of temperature targets across a day. The format is one target for every hour (0:00 - 23:00) in fahrenheit. A value of AC_OFF means AC is turned off.

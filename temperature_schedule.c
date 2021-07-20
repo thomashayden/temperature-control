@@ -2,7 +2,7 @@
 
 uint8_t targets[HOURS_PER_DAY] = { AC_OFF };
 
-uint8_t get_current_temperature_target() {
+float get_current_temperature_target() {
     time_t now = time(NULL);
     struct tm* now_tm = localtime(&now);
     int hour = now_tm->tm_hour;
