@@ -4,12 +4,25 @@ int desired_ac_state = 0;
 char* filename;
 
 float get_current_temperature() {
+    // 7c 01 7f 80 7f ff 04 10 86 : crc=86 YES
+    // 7c 01 7f 80 7f ff 04 10 86 t=23750
     FILE* fp;
     fp = fopen(SENSOR_FILE, "r");
-    int temp;
-    fscanf(fp, "t=%d", &temp);
+    if (fp == NULL) {
+        return -1;
+    }
+    int crc, temp;
+    char hex1[2], hex2[2], hex3[2], hex4[2], hex5[2], hex6[2], hex7[2], hex8[2], hex9[2], crc_good[10];
+    char hex10[2], hex11[2], hex12[2], hex13[2], hex14[2], hex15[2], hex16[2], hex17[2], hex18[2];
+    fscanf(fp, "%s %s %s %s %s %s %s %s %s : crc=%d %s\n"
+               "%s %s %s %s %s %s %s %s %s t=%d",
+               &hex1, &hex2, &hex3, &hex4, &hex5, &hex6, &hex7, &hex8, &hex9, &crc, &crc_good,
+               &hex10, &hex11, &hex12, &hex13, &hex14, &hex15, &hex16, &hex17, &hex18, &temp);
     float temp_c = temp / 1000.0;
     float temp_f = (temp_c * 1.8) + 32.0;
+    if (temp_f > 150 || temp_f < 0) {
+        return -1;
+    }
     return temp_f;
 }
 
