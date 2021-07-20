@@ -1,16 +1,19 @@
 #include "rxtx.h"
+#include "wiringPi.h"
 
 void setup() {
     // TODO: Setup pins that are needed
+    wiringPiSetupGpio();
+    pinMode(PIN_RECEIVE, INPUT);
+    pinMode(PIN_TRANSMIT, OUTPUT);
 }
 
 int read_rx() {
-    // TODO: Implement
-    return 0;
+    return digitalRead(PIN_RECEIVE);
 }
 
 void write_tx(const int value) {
-    // TODO: Implement
+    digitalWrite(PIN_TRANSMIT, value);
 }
 
 // From https://programmingtoddler.wordpress.com/2014/11/09/c-how-to-get-system-timestamp-in-second-millisecond-and-microsecond/
@@ -38,21 +41,21 @@ void find_remote_code() {
     // This should be the code. If it doesn't work, run this method again
 
     // Listen determine that there is no serious noise
-    fprintf(stdout, "Checking for noise. Please wait.\n");
-    long long int start = get_time_microsecond();
-    while (get_time_microsecond() - start < NOISE_CHECK_TIMEOUT_MS * 1000) {
-        if (read_rx() != LOW) {
-            fprintf(stderr, "Noise detected. Unable to detect button press.\n");
-            return;
-        }
-    }
-    fprintf(stdout, "No noise detected.\n");
+//    fprintf(stdout, "Checking for noise. Please wait.\n");
+//    long long int start = get_time_microsecond();
+//    while (get_time_microsecond() - start < NOISE_CHECK_TIMEOUT_MS * 1000) {
+//        if (read_rx() != LOW) {
+//            fprintf(stderr, "Noise detected. Unable to detect button press.\n");
+//            return;
+//        }
+//    }
+//    fprintf(stdout, "No noise detected.\n");
 
     // Prompt user to press button once
     fprintf(stdout, "Beginning detection of button. Press button once now.\n");
 
     // Monitor Rx for a HIGH signal
-    start = get_time_microsecond();
+    long long int start = get_time_microsecond();
     while (read_rx() == LOW && start - get_time_microsecond() < WAIT_FOR_BUTTON_TIMEOUT_MS * 1000);
     if (start - get_time_microsecond() < WAIT_FOR_BUTTON_TIMEOUT_MS * 1000) {
         fprintf(stderr, "Time out waiting for button press. No high signal detected on Rx.");
