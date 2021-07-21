@@ -11,7 +11,7 @@ int main() {
     initialize_file_name();
     setup();
 
-    uint8_t new_targets[24] = { 74, 73, 73, 73, 73, 73, 73, 73, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74, 74 };
+    uint8_t new_targets[24] = { 73, 72, 72, 72, 72, 72, 72, 72, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73, 73 };
     set_temperature_targets(new_targets);
 
     while (1) {
