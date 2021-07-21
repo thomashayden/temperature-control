@@ -10,7 +10,7 @@
 
 #define MINIMUM_AC_OFF_TIME 5 // Minutes
 #define UPDATE_CYCLE_TIME 1 // Minutes
-#define MAXIMUM_ALLOWABLE_TEMPERATURE_DELTA 1 // Deg F
+#define MAXIMUM_ALLOWABLE_TEMPERATURE_DELTA 1.5 // Deg F
 #define SENSOR_FILE "/sys/bus/w1/devices/28-000000031105/w1_slave"
 
 void initialize_file_name();
