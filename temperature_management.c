@@ -10,7 +10,7 @@ void init_update_file_name() {
     time(&timeIn);
     struct tm* dateTime;
     dateTime = localtime(&timeIn);
-    sprintf(filename, "logs/%d%d%d", 1900 + dateTime->tm_year, 1 + dateTime->tm_mon, dateTime->tm_mday);
+    sprintf(filename, "logs/%d%02d%02d", 1900 + dateTime->tm_year, 1 + dateTime->tm_mon, dateTime->tm_mday);
 }
 
 void log_message(char* message) {
