@@ -13,7 +13,7 @@
 #define MAXIMUM_ALLOWABLE_TEMPERATURE_DELTA 1.5 // Deg F
 #define SENSOR_FILE "/sys/bus/w1/devices/28-000000031105/w1_slave"
 
-void initialize_file_name();
+void init_update_file_name();
 
 int get_desired_ac_state();
 
