@@ -5,6 +5,7 @@
 #include "rxtx.h"
 
 #include <bits/types/FILE.h>
+#include <errno.h>
 #include <stdio.h>
 #include <time.h>
 

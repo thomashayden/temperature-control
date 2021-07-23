@@ -27,7 +27,12 @@ float get_current_temperature() {
     FILE* fp;
     fp = fopen(SENSOR_FILE, "r");
     if (fp == NULL) {
-        perror("Error opening file: ");
+        size_t needed = snprintf(NULL, 0, "  Error opening file: %s\n", strerror(errno)) + 1;
+        char* buffer = malloc(needed);
+        sprintf(buffer, "  Error opening file: %s\n", strerror(errno));
+        log_message(buffer);
+        free(buffer);
+        perror("");
         return -1;
     }
 
@@ -35,6 +40,7 @@ float get_current_temperature() {
     char data[256];
     char* dataP;
     fread(data, sizeof(char), 256, fp);
+    fclose(fp);
     if (strstr(data, "YES") != NULL) {
         dataP = strstr(data, "t=");
         if (dataP != NULL) {
@@ -83,13 +89,22 @@ void update() {
     int ac_state_desired = get_desired_ac_state();
     if (last_desired != ac_state_desired) {
         if (get_current_time_sec() - last_ac_state_change_time >= MINIMUM_AC_OFF_TIME * 60) {
-            fprintf(stdout, "Setting AC to state %d\n", ac_state_desired);
+            size_t needed = snprintf(NULL, 0, "Setting AC to state %d\n", ac_state_desired) + 1;
+            char* buffer = malloc(needed);
+            sprintf(buffer, "Setting AC to state %d\n", ac_state_desired);
+            log_message(buffer);
+            free(buffer);
             write_remote(ac_state_desired, 1);
             last_ac_state_change_time = get_current_time_sec();
         } else {
             desired_ac_state = last_desired;
-            fprintf(stderr, "Desire to change AC state to %d, but minimum state change timing is blocking.",
+            size_t needed = snprintf(NULL, 0, "Desire to change AC state to %d, but minimum state change timing is blocking.",
+                                     ac_state_desired) + 1;
+            char* buffer = malloc(needed);
+            sprintf(buffer, "Desire to change AC state to %d, but minimum state change timing is blocking.",
                     ac_state_desired);
+            log_message(buffer);
+            free(buffer);
         }
     }
     log_temperature_and_ac_state();
