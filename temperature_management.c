@@ -27,9 +27,9 @@ float get_current_temperature() {
     FILE* fp;
     fp = fopen(SENSOR_FILE, "r");
     if (fp == NULL) {
-        size_t needed = snprintf(NULL, 0, "  Error opening file: %s\n", strerror(errno)) + 1;
+        size_t needed = snprintf(NULL, 0, "  Error opening file: %s", strerror(errno)) + 1;
         char* buffer = malloc(needed);
-        sprintf(buffer, "  Error opening file: %s\n", strerror(errno));
+        sprintf(buffer, "  Error opening file: %s", strerror(errno));
         log_message(buffer);
         free(buffer);
         perror("");
@@ -89,9 +89,9 @@ void update() {
     int ac_state_desired = get_desired_ac_state();
     if (last_desired != ac_state_desired) {
         if (get_current_time_sec() - last_ac_state_change_time >= MINIMUM_AC_OFF_TIME * 60) {
-            size_t needed = snprintf(NULL, 0, "Setting AC to state %d\n", ac_state_desired) + 1;
+            size_t needed = snprintf(NULL, 0, "Setting AC to state %d", ac_state_desired) + 1;
             char* buffer = malloc(needed);
-            sprintf(buffer, "Setting AC to state %d\n", ac_state_desired);
+            sprintf(buffer, "Setting AC to state %d", ac_state_desired);
             log_message(buffer);
             free(buffer);
             write_remote(ac_state_desired, 1);
